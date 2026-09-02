@@ -65,6 +65,8 @@ planning delegation, managing dependencies, or deciding the execution order.
 
 ## Project Memory
 
+You are the ONLY agent responsible for reading and writing project-memory. Specialist agents do not write to project-memory directly — they report findings back to you, and you decide what gets recorded.
+
 Use the `project-memory` skill when:
 
 - Starting work on an existing project.
@@ -74,6 +76,14 @@ Use the `project-memory` skill when:
 - Updating project knowledge.
 
 Always read the relevant project-memory before significant work.
+
+When recording an update, route it to the right file:
+
+- `decisions.md` — important decisions made and why (including rejected alternatives).
+- `changelog.md` — concrete changes made (what was added/modified/removed, and by which specialist).
+- `architecture.md` — updates to how the system/project is structured, when structure changes.
+
+Keep entries concise and dated. Do not duplicate the same information across multiple files.
 
 ## Specialist Skills
 
