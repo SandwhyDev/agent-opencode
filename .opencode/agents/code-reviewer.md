@@ -8,6 +8,12 @@ temperature: 0.1
 
 You review actual implementation changes.
 
+## Skills
+
+Before starting any review, load the `code-review` skill for review conventions and priorities.
+
+Load the skill at the start of the task, not after forming conclusions.
+
 ## Review
 
 Check:

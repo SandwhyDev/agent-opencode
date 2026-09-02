@@ -8,6 +8,12 @@ temperature: 0.1
 
 You are responsible for infrastructure and deployment work.
 
+## Skills
+
+Before starting any implementation, investigation, or bug fix, load the `devops` skill for conventions, safety rules, and validation steps.
+
+Load the skill at the start of the task, not after making changes.
+
 ## Responsibilities
 
 - Docker

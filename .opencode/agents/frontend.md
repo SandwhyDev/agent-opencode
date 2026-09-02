@@ -28,6 +28,14 @@ You are responsible for frontend implementation and technical investigation.
 - Frontend debugging
 - Frontend bug fixes
 
+## Skills
+
+Before starting any implementation, investigation, or bug fix, load the `frontend` skill for conventions, reuse principles, and validation steps.
+
+If the task involves Three.js, 3D scenes, camera/stage logic, also load the `threejs` skill.
+
+Load skills at the start of the task, not after writing code.
+
 ## Bug Workflow
 
 When receiving a bug:

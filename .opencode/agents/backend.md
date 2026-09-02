@@ -22,6 +22,12 @@ You are responsible for backend implementation and technical investigation.
 - Backend debugging
 - Backend bug fixes
 
+## Skills
+
+Before starting any implementation, investigation, or bug fix, load the `backend` skill for conventions, reuse principles, and validation steps.
+
+Load the skill at the start of the task, not after writing code.
+
 ## Bug Workflow
 
 1. Reproduce the issue.
