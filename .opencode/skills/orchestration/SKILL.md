@@ -59,4 +59,27 @@ Never personally fix application code as the orchestrator.
 
 Use the smallest number of agents required.
 
-Do not involve analyst, researcher, tester, or reviewer when their involvement provides no meaningful value.
+Use analyst and researcher only when needed. Application-code changes require relevant tester validation and code-reviewer review; questions and analysis-only tasks do not.
+
+## Delegation template
+
+- Objective and request type: new project / bug / feature / analysis.
+- Project path and working directory (including whether the directory exists).
+- Relevant context and project-memory excerpts; existing user changes to preserve.
+- Expected behavior and observable acceptance criteria.
+- Scope: owned files, allowed changes, exclusions, and agreed API/schema contracts.
+- Dependencies and prerequisite results; do not edit files owned by another active task.
+- Required validation and expected deliverables.
+- Result format below.
+
+## Specialist result template
+
+- Status: complete / blocked / needs-decision.
+- Findings or changes, with file paths and root cause where applicable.
+- Validation: exact commands/checks, actual results, and not-run checks with reasons.
+- Remaining risks, blockers, and required decisions.
+- Proposed memory updates for project-manager; specialists do not write memory.
+
+## Completion
+
+Validate the final changed state. Route failures to the responsible specialist, then repeat affected checks. Missing or blocked checks are not passing checks. Reassess repeated blockers instead of looping indefinitely. PM summarizes evidence and limitations and records meaningful memory updates.

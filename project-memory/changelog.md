@@ -1,5 +1,14 @@
 # Changelog
 
+## [2026-09-08] Clarified PM orchestration workflow
+
+- Added new-project, bug, feature, and analysis routes with consistent completion gates.
+- Allowed PM Markdown memory edits while keeping application implementation delegated.
+- Restored researcher responsibilities and added analyst/researcher skills.
+- Corrected specialist permission ordering and tester file patterns.
+- Added delegation/result contracts, file ownership, and blocker handling.
+- Validation: static consistency checks; OpenCode runtime validation remains unavailable due to the previously observed local configuration startup error.
+
 ## [2026-09-02] Fixed skill discovery and standardized skill usage across agents
 
 - Root cause: `skills/` folder was outside `.opencode/`, and project was not a git repo — both required for OpenCode skill discovery.
