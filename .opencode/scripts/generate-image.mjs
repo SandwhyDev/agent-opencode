@@ -3,6 +3,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { saveImages } from './save-generated-images.mjs';
 import { cleanupJson, digest } from './cleanup-image-json.mjs';
+import { loadPixazoEnv } from './load-env.mjs';
 
 export const inpaintEndpoint = 'https://gateway.pixazo.ai/inpainting/v1/getImage';
 
@@ -49,7 +50,7 @@ export function makeBody(input) {
 }
 
 export async function generate(input, key, fetchImpl = fetch) {
-  if (!key?.trim()) throw new Error('Set PIXAZO_API_KEY before launching OpenCode.');
+  if (!key?.trim()) throw new Error('Set PIXAZO_API_KEY in the workspace .env file or environment.');
   if (input.allow_paid || (input.mode && input.mode !== 'inpaint')) throw new Error('Paid or unknown modes are disabled.');
   const inpaint = input.mode === 'inpaint';
   let body;
@@ -94,6 +95,7 @@ export async function getStatus(requestId, key, fetchImpl = fetch) {
 }
 
 async function main() {
+  await loadPixazoEnv();
   if (process.argv[2] === '--download') {
     if (process.argv.length !== 4) throw new Error('Usage: --download <saved-response.json>');
     const responseFile = process.argv[3];

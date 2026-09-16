@@ -1,8 +1,13 @@
 # Standalone image generator
 
-Requires Node.js 18+ and PIXAZO_API_KEY in the OpenCode process environment.
-The Windows user variable was configured previously; restart the terminal to load it.
-Never paste API keys into tracked documentation.
+Requires Node.js 18+. On a new device, copy `.env.example` to `.env` in the
+workspace root, then set `PIXAZO_API_KEY=your_key` in that file.
+
+The helper reads the root .env on every run. A non-empty .env key overrides the
+environment variable; an empty or missing .env key falls back to the environment.
+No terminal restart is required after editing .env. Only PIXAZO_API_KEY is loaded.
+.env is ignored by Git; .env.example contains no credentials and can be committed.
+Never paste API keys into tracked documentation or chat output.
 
 Run `opencode --agent image-generator` from this workspace.
 Generic images use free Flux Schnell. Paid routes remain disabled.
