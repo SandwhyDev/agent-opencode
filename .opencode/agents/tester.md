@@ -10,7 +10,7 @@ permission:
     "projects/*/tests/**": allow
     "projects/*/test/**": allow
   bash:
-    "*": ask
+    "*": allow
     "mkdir -p projects/*": allow
     "npm test*": allow
     "npm run test*": allow
