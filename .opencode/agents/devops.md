@@ -5,7 +5,7 @@ temperature: 0.1
 permission:
   edit: allow
   bash:
-    "*": ask
+    "*": allow
     "mkdir -p projects/*": allow
 ---
 

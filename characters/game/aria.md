@@ -1,4 +1,5 @@
 # Aria
+<<<<<<< HEAD
 Status: approved
 Art direction: ../game-art-design-guideline.md (v1.0)
 Design version: 1 (costume description corrected from user-supplied image, 2026-09-17)
@@ -115,3 +116,38 @@ ARIA COSTUME LOCK: The same fitted dark navy short-sleeved high-collar tunic-dre
 - The costume reference is a front-facing crop on a near-white background, not evidence of a full-body 3/4 composition. Use the series presentation rules for new key art without changing the garment construction.
 - Future variations must be compared for collar, sleeve length, pauldron shape, chest motif, waist panel borders, skirt panel structure and cuffs; unchanged colors alone do not constitute a match.
 - No new image was generated or visually validated after this correction. Text-only generation still cannot guarantee costume identity.
+=======
+
+Status: draft
+Art direction: ../game-art-design-guideline.md (v1.0)
+Design version: 1
+
+## Identity lock
+- Adult age impression and personality: mature adult woman, calm disciplined swordswoman (pendekar), composed and focused.
+- Exact body proportion within 7.5–8 heads: 7.5–8 heads tall, small head, elegant long-legged silhouette, believable adult anatomy.
+- Face structure, eye shape/color, nose, lips: refined mature anime face, soft oval jaw, large but believable blue eyes with detailed iris, subtle eyelashes, small refined nose, delicate lips.
+- Skin tone and undertone: soft natural fair skin with warm undertones.
+- Hairline, cut, length, silhouette, parting, color: long silver hair, center parting, flowing past mid-back, structured large masses → major locks → secondary locks → selected strands, directional semi-gloss highlights following hair curvature.
+- Distinguishing marks and their left/right location: none specified; none assumed.
+
+## Costume and equipment lock
+- Garment layers, cuts, seams, fastenings and silhouette: navy warrior outfit with gold accents — structured fitted tunic/armor top, layered skirt or hakama-style lower garment, gold trim and fastenings; silhouette elegant and martial.
+- Material assigned to each garment/accessory: matte fabric for cloth, semi-gloss leather for straps/belt, reflective metal for armor plates and sword.
+- Main, secondary and accent colors: main navy blue, secondary deep desaturated blue/charcoal, accent gold.
+- Weapon: single-edged or double-edged sword, elegant katana-like or straight blade, gold-accented guard and navy-wrapped hilt; right-handed.
+- Accessories: gold-trimmed belt/sash at waist; placement assumed symmetrical unless approved.
+
+## Approved reference
+- Original approved local image path: (pending)
+- Source URL if available: (pending)
+- User approval / pending approval: pending
+- Model, seed, dimensions and parameters used, if known: flux-1-schnell, seed 40, 1024x1024, 20 steps, guidance 5 (candidate only)
+- Unseen details that remain assumptions: back view, exact armor construction, belt/sash details, sword crossguard shape, footwear.
+
+## Variants
+- (none yet)
+
+## Validation notes
+- Checks actually performed: (pending first candidate)
+- Remaining mismatches or unverified details: text-only generation cannot guarantee identity; visual review required.
+>>>>>>> a1d7ba22806d7923f32abf71a0d923ebacbacf93

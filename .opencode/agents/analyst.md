@@ -5,7 +5,7 @@ temperature: 0.1
 permission:
   edit: deny
   bash:
-    "*": ask
+    "*": allow
     "grep *": allow
     "find *": allow
     "cat *": allow
