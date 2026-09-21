@@ -1,6 +1,42 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
+import { spawn } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+
+export function pythonFetch(url) {
+  return new Promise((resolve, reject) => {
+    const env = { ...process.env };
+    delete env.PIXAZO_API_KEY;
+    const child = spawn(process.env.PYTHON_EXECUTABLE || 'python',
+      [fileURLToPath(new URL('./download-image.py', import.meta.url))],
+      { shell: false, windowsHide: true, env, stdio: ['pipe', 'pipe', 'pipe'] });
+    const chunks = [];
+    let size = 0, stderr = '', stopped = false;
+    const timer = setTimeout(() => {
+      stopped = true; child.kill(); reject(new Error('Python image download timed out.'));
+    }, 70000);
+    child.on('error', error => {
+      clearTimeout(timer);
+      reject(new Error(error.code === 'ENOENT' ? 'Python not found. Install Python 3 or set PYTHON_EXECUTABLE to its full path.' : error.message));
+    });
+    child.stdout.on('data', chunk => {
+      size += chunk.length;
+      if (size > 32 * 1024 * 1024) {
+        stopped = true; child.kill(); clearTimeout(timer); reject(new Error('Image exceeds 32 MB.'));
+      } else chunks.push(chunk);
+    });
+    child.stderr.on('data', chunk => { stderr = (stderr + chunk.toString()).slice(0, 2000); });
+    child.stdin.on('error', () => {}); // Process may exit before consuming input.
+    child.on('close', code => {
+      clearTimeout(timer);
+      if (stopped) return;
+      if (code !== 0) reject(new Error(stderr.trim() || 'Python image download failed.'));
+      else resolve(new Response(Buffer.concat(chunks)));
+    });
+    child.stdin.end(url);
+  });
+}
 
 export function imageUrls(result) {
   if (result.status && !['COMPLETED', 'SUCCESS', 'SUCCEEDED'].includes(String(result.status).toUpperCase())) return [];
@@ -15,7 +51,7 @@ function extension(bytes) {
   throw new Error('Response is not a supported PNG, JPEG or WebP image.');
 }
 
-export async function saveImages(result, directory, name = 'image', fetchImpl = fetch) {
+export async function saveImages(result, directory, name = 'image', fetchImpl = pythonFetch) {
   const files = [], errors = [];
   const urls = imageUrls(result);
   const stem = name.replace(/[^a-zA-Z0-9_-]/g, '-').slice(0, 80) || 'image';

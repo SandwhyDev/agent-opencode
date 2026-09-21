@@ -1,6 +1,6 @@
 # Standalone image generator
 
-Requires Node.js 18+. On a new device, copy `.env.example` to `.env` in the
+Requires Node.js 18+ and Python 3 on PATH. On a new device, copy `.env.example` to `.env` in the
 workspace root, then set `PIXAZO_API_KEY=your_key` in that file.
 
 The helper reads the root .env on every run. A non-empty .env key overrides the
@@ -48,3 +48,44 @@ downloads keep JSON for recovery. Files changed since generation are preserved.
 Download retries also clean up the associated JSON. Legacy responses without
 request metadata can remove only their own response file, not guess a request.
 Existing JSON is not bulk-deleted. Image files and character profiles are retained.
+
+
+## Schnell defaults
+
+```json
+{"prompt":"Your image description","height":1024,"width":1024,"num_steps":4,"seed":40}
+```
+
+Schnell accepts 1-8 steps; requests above 8 are rejected locally. The helper no
+longer sends guidance_scale to Schnell, even if a legacy request includes it.
+Inpainting retains its separate 1-20 step range and guidance parameter.
+Source: https://www.pixazo.ai/models/flux (Flux 1 Schnell request parameters).
+
+
+## Python image downloads
+
+Image downloads now use `download-image.py` (Python standard library, no pip
+packages). Generation still uses Node.js. Run `python --version` to check setup.
+For a custom interpreter, set the environment variable PYTHON_EXECUTABLE to its
+full executable path. Only PIXAZO_API_KEY is loaded from .env.
+
+HTTPS verification remains enabled. A browser opening an image successfully does
+not prove the Python certificate chain is valid; browser and Python trust/proxy
+configuration may differ. Certificate errors are reported as certificate errors,
+not described as an internet permission block. On failure, JSON is retained.
+
+Python checks: `python -B .opencode/scripts/test_download_image.py`.
+
+
+## Pixazo storage DNS fallback
+
+On 2026-09-17, local DNS mapped Pixazo's R2 storage domain to a filtering page,
+causing a TLS hostname mismatch. The downloader now retries certificate failures
+for that exact storage hostname using Google DNS-over-HTTPS. It connects to a
+public resolved address while retaining the original Host, TLS SNI and certificate
+hostname verification. No Windows DNS settings are changed and TLS verification
+is never disabled. Other hosts do not receive this fallback; redirects remain blocked.
+
+An actual Aria image download succeeded after this fix. If secure DNS or the image
+server is unreachable on another device, the helper still reports the failure and
+keeps request/response JSON for retry without another generation.

@@ -39,13 +39,13 @@ export function makeBody(input) {
     throw new Error('A non-empty prompt is required.');
   }
   const body = { prompt: input.prompt.trim(), height: input.height ?? 1024,
-    width: input.width ?? 1024, num_steps: input.num_steps ?? 20,
-    guidance_scale: input.guidance_scale ?? 5, seed: input.seed ?? 40 };
+    width: input.width ?? 1024, num_steps: input.num_steps ?? 4,
+    seed: input.seed ?? 40 };
   for (const field of ['height', 'width', 'num_steps']) {
     if (!Number.isInteger(body[field]) || body[field] <= 0) throw new Error(`Invalid ${field}.`);
   }
   if (!Number.isSafeInteger(body.seed) || body.seed < 0) throw new Error('Invalid seed.');
-  if (!Number.isFinite(body.guidance_scale) || body.guidance_scale < 0) throw new Error('Invalid guidance_scale.');
+  if (body.num_steps > 8) throw new Error('Schnell num_steps must be between 1 and 8. Default is 4.');
   return body;
 }
 
@@ -61,15 +61,19 @@ export async function generate(input, key, fetchImpl = fetch) {
       try { url = new URL(input[field]); } catch { throw new Error(`A public HTTPS ${field} is required.`); }
       if (url.protocol !== 'https:' || url.username || url.password) throw new Error(`A public HTTPS ${field} is required.`);
     }
-    const numeric = makeBody({ prompt: input.prompt, num_steps: input.num_steps, guidance_scale: input.guidance, seed: input.seed });
-    if (numeric.num_steps > 20) throw new Error('Inpainting supports at most 20 steps.');
+    const numeric = makeBody({ prompt: input.prompt, seed: input.seed });
+    const steps = input.num_steps ?? 20;
+    const guidance = input.guidance ?? 5;
+    if (!Number.isInteger(steps) || steps < 1 || steps > 20) throw new Error('Inpainting num_steps must be between 1 and 20.');
+    if (!Number.isFinite(guidance) || guidance < 0) throw new Error('Invalid inpainting guidance.');
     body = { prompt: numeric.prompt, imageUrl: input.imageUrl, maskUrl: input.maskUrl,
-      negative_prompt: input.negative_prompt ?? '', num_steps: numeric.num_steps,
-      guidance: numeric.guidance_scale, seed: numeric.seed };
+      negative_prompt: input.negative_prompt ?? '', num_steps: steps,
+      guidance, seed: numeric.seed };
     // Omit width/height: preserve source sizing rather than force square output.
   } else {
     if (input.image_urls || input.imageUrl || input.maskUrl || input.character) throw new Error('Reference input requires prepared inpaint mode; refusing text-only fallback.');
     body = makeBody(input);
+    if ([...body.prompt].length > 2048) throw new Error('Schnell prompt exceeds 2048 characters. Use compact style/costume descriptions and put the requested pose first; do not truncate.');
   }
   let response;
   try {

@@ -14,7 +14,7 @@ This is an art-direction requirement and a review standard, not proof that the
 current text-to-image API can enforce identical identity. Never claim a visual
 match based only on a prompt, seed, HTTP success or downloaded file.
 
-## Canonical style lock — copy verbatim into every game-art prompt
+## Canonical style specification — full design and review reference
 
 <!-- game-style:start -->
 GAME ART STYLE LOCK: Premium semi-realistic anime game character illustration. Adult human proportions, 7.5–8 heads tall, relatively small head, elegant long-legged silhouette, anatomically believable body. Refined mature anime face, soft oval jaw, large but believable eyes, detailed iris, subtle eyelashes, small refined nose and delicate lips. Highly structured hair rendering: large hair masses → major locks → secondary locks → selected individual strands. Directional semi-gloss highlights following hair curvature. Soft natural skin with warm undertones. Rendering uses soft controlled cel-shading combined with subtle gradients. Approx. 70% base/light, 20% primary shadow, 8% secondary shadow, 2% deep occlusion. Large soft key light from upper front-left. Subtle fill. Controlled rim light. Clean variable-weight linework. Strong outer silhouette, medium secondary contours, delicate internal lines. Avoid pure black wherever possible. Sophisticated slightly desaturated color palette. Controlled saturation. Premium cinematic color grading. Differentiate materials through physically believable highlight behavior: matte fabric, soft skin, semi-gloss hair/leather, reflective metal. Full-body 3/4 presentation, neutral camera, 50–85mm equivalent perspective, light gray background. High-end professional game character key art. Consistency is mandatory: body proportion, face style, eyes, hair rendering, outlines, shadows, lighting, materials, color grading and rendering quality must remain unchanged between characters. Only character identity, costume, hairstyle, weapon, accessories, personality and accent colors may change.
@@ -100,31 +100,34 @@ Never label a design approved until the user approves it. Keep rejected or draft
 images out of the canonical-reference field. Do not invent unobserved back-view
 details as established design facts.
 
-## Prompt assembly
+## Prompt assembly for Schnell
 
-Use this order on every generation:
+The documented Schnell prompt limit is 2048 characters. The full style specification
+and a detailed costume specification together can exceed it. They are reference
+and review documents; do NOT concatenate them verbatim into the API request.
+Keep the final prompt preferably below 1800 characters and always at most 2048.
 
-1. The complete canonical style lock above, unchanged.
-2. CHARACTER IDENTITY LOCK: the relevant profile's exact stable visual details.
-3. COSTUME AND EQUIPMENT LOCK: approved construction, palette, materials and placement.
-4. REQUESTED CHANGE ONLY: the user's pose, expression or explicitly requested variant.
-5. PRESENTATION: full-body 3/4, neutral camera, light gray background; retain margins.
-6. AVOID: chibi proportions, oversized head/eyes, photorealism, plush 3D toy rendering,
-   random hair strands, glossy skin/cloth, neon palette, uniform black outlines,
-   cropped feet, extra limbs/fingers, changed costume details, text and watermark.
+Use this order:
+1. REQUESTED ACTION first, with observable anatomy. For waving: right elbow bent,
+   right hand raised beside the head, open palm toward viewer, fingers naturally
+   spread, left arm relaxed. Do not assign a weapon to the waving hand.
+2. Concise identity: name, adult appearance, face, eye color, hair silhouette/color.
+3. The profile's costume-compact block, preserving construction, not just colors.
+4. The compact style block below. Do not append the full reference specification.
 
-Do not summarize the canonical lock differently on each request. Do not add
-conflicting style tags such as flat vector, watercolor, photoreal or Pixar-like.
-Do not pass unsupported API fields: the current generic Schnell helper accepts
-`prompt` and its existing numeric parameters, so include avoidance text inside
-the prompt rather than inventing a negative_prompt parameter for that endpoint.
+<!-- game-style-compact:start -->
+Premium semi-realistic anime game key art, adult 7.5-8-head proportions, small head, long legs, mature oval face and believable detailed eyes. Structured hair locks with directional semi-gloss highlights; warm soft skin. Controlled cel-shading with subtle gradients, approx. 70/20/8/2 light-to-occlusion balance. Soft upper-front-left key, subtle fill/rim. Variable-weight chromatic linework, restrained slightly desaturated cinematic palette. Distinct matte cloth, soft skin, semi-gloss hair/leather, reflective metal. Full-body 3/4 view, neutral 50-85mm perspective, light gray background.
+<!-- game-style-compact:end -->
 
-For generic game-art generation use the `prompt` request route. The helper's
-existing `character` field is a separate legacy inpainting route; do not send a
-game profile name there or ask the user for a mask for this workflow. A local
-reference path in the prompt is not an image input to the API. Clearly state
-that current text-only results are candidates requiring visual review, especially
-for new poses of an existing character.
+Pose is the changed element; do not mix it into the identity lock. Avoid lengthy
+negative lists and repeated preservation instructions. Count the final prompt
+before sending. If too long, reduce redundant prose, not the requested action or
+costume construction; never silently truncate. The helper rejects oversized prompts.
+
+Use the generic prompt route for game art; character is the separate legacy
+inpainting route. Local reference paths are not image inputs to Schnell. Current
+text-only outputs are candidates, not guaranteed same-character edits. Verify the
+requested action as well as style and clothing; a missing wave is a failed result.
 
 ## Development workflow and review gate
 

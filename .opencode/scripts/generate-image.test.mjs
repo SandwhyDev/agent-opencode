@@ -12,6 +12,8 @@ test('Luna edits use free inpainting with original image and required mask', asy
     assert.equal(body.maskUrl, 'https://example.com/mask.png');
     assert.equal(body.imageUrl, input.imageUrl);
     assert.equal(body.guidance, 5);
+    assert.equal(body.num_steps, 20);
+    assert.equal(body.guidance_scale, undefined);
     assert.equal(body.mode, undefined);
     assert.equal(body.width, undefined);
     assert.equal(body.seed, 40);
@@ -52,7 +54,7 @@ test('sends the specified Pixazo request and preserves response', async () => {
     assert.equal(options.method, 'POST');
     assert.equal(options.headers['Ocp-Apim-Subscription-Key'], 'test-key');
     assert.equal(options.redirect, 'error');
-    assert.deepEqual(JSON.parse(options.body), { prompt: 'a mountain', height: 1024, width: 1024, num_steps: 20, guidance_scale: 5, seed: 40 });
+    assert.deepEqual(JSON.parse(options.body), { prompt: 'a mountain', height: 1024, width: 1024, num_steps: 4, seed: 40 });
     return { ok: true, json: async () => ({ output: 'example-image' }) };
   });
   assert.deepEqual(result, { output: 'example-image' });
@@ -62,6 +64,25 @@ test('rejects invalid inputs and missing credentials before sending', async () =
   assert.throws(() => makeBody({ prompt: ' ' }));
   assert.throws(() => makeBody({ prompt: 'x', width: -1 }));
   await assert.rejects(generate({ prompt: 'x' }, '', () => assert.fail('must not send')), /PIXAZO_API_KEY/);
+});
+
+test('Schnell enforces supported steps and omits legacy guidance_scale', async () => {
+  for (const num_steps of [1, 4, 8]) {
+    const body = makeBody({ prompt: 'x', num_steps, guidance_scale: 5 });
+    assert.equal(body.num_steps, num_steps);
+    assert.equal(Object.hasOwn(body, 'guidance_scale'), false);
+  }
+  for (const num_steps of [0, 9, 20, 1.5]) {
+    await assert.rejects(generate({ prompt: 'x', num_steps }, 'test', () => assert.fail('must not send')));
+  }
+});
+
+test('Schnell rejects oversized prompts before sending and accepts the boundary', async () => {
+  await assert.rejects(generate({ prompt: 'x'.repeat(2049) }, 'test', () => assert.fail('must not send')), /2048/);
+  await generate({ prompt: 'x'.repeat(2048) }, 'test', async (url, options) => {
+    assert.equal(JSON.parse(options.body).prompt.length, 2048);
+    return { ok: true, json: async () => ({ output: 'ok' }) };
+  });
 });
 
 test('HTTP failures and network failures do not retry or expose response secrets', async () => {
