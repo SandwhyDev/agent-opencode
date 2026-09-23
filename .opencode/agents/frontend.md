@@ -45,6 +45,10 @@ Before starting any implementation, investigation, or bug fix, load the `fronten
 
 If the task involves Three.js, 3D scenes, camera/stage logic, also load the `threejs` skill.
 
+If the user requests Apple-style web UI, or the task involves gesture-driven interactions, spring animations, draggable sheets, or interruptible motion, also load the `apple-design` skill at `.opencode/skills/apple-design/SKILL.md`. Apply its relevant guidance within the requested scope and the project's existing design system; do not introduce a visual redesign or new animation dependencies just because the skill is available. Preserve keyboard access, focus behavior, contrast, and reduced-motion support.
+
+A delegated implementation task is already a specific request: continue working on it after loading `apple-design`, without stopping for the skill's introductory readiness response or asking the user to repeat the task.
+
 Load skills at the start of the task, not after writing code.
 
 ## Bug Workflow

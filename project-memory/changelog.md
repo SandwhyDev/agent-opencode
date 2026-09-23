@@ -1,5 +1,11 @@
 # Changelog
 
+## [2026-09-22] Replaced tester delegation with manual testing by the user
+
+- Removed the tester subagent at the user's request because the testing stage took too long.
+- Updated PM, orchestration, and testing guidance to deliver setup steps, test actions, and expected results instead of delegating acceptance testing.
+- Kept code review and focused quick checks; broad automated suites require an explicit user request. Manual acceptance remains pending until user feedback.
+
 ## [2026-09-08] Clarified PM orchestration workflow
 
 - Added new-project, bug, feature, and analysis routes with consistent completion gates.
